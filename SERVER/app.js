@@ -1,5 +1,21 @@
 const express = require("express");
 const app = express();
+const mongoose= require("mongoose");
+const { MONGOURI } = require("./keys");
+
+mongoose.connect(MONGOURI,{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+});
+
+mongoose.connection.on("connected",()=>{
+    console.log("connected to mongo");
+})
+
+
+mongoose.connection.on("error",(err)=>{
+    console.log("connected to mongo", err);
+})
 
 app.get("/", function(req,res){
     res.send("Hello world");
