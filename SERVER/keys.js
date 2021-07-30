@@ -1,3 +1,4 @@
 module.exports={
-    MONGOURI:"mongodb+srv://Shubhanshu:xZdPpSHwuY3vRBG4@cluster0.getak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    MONGOURI:"mongodb+srv://admin-shubhanshu:yGUD5BctI8ONnF8Z@cluster0.rgmb5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }
+
