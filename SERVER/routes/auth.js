@@ -3,9 +3,12 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const bcrypt=require('bcryptjs');
+const jwt= require('jsonwebtoken');
+const{JWT_SRT}=require('../keys');
+const requireLogin=require('../middleware/requireLogin');
 
-router.get("/",(req,res)=>{
-    res.send("Hello");
+router.get("/protected",requireLogin,(req,res)=>{
+    res.send("Hello user");
 })
 
 router.post("/singup",(req,res)=>{
@@ -39,6 +42,34 @@ router.post("/singup",(req,res)=>{
     })
     .catch(err=>{
         console.log(err)
+    })
+})
+
+router.post('/singin',(req,res)=>{
+    const {email,password}=req.body
+    if(!email || !password){
+        return res.status(422).json({error:"please add email or password"})
+    }
+
+    User.findOne({email:email})
+    .then(savedUser=>{
+        if(!savedUser){
+            return res.status(422).json({error:"Invalid Email or Password"})
+        }
+        bcrypt.compare(password,savedUser.password)
+        .then(doMatch=>{
+            if(doMatch){
+               const token=jwt.sign({_id:savedUser._id},JWT_SRT);
+               res.json({token})
+            }
+            else{
+                return res.json({error:"Invalid Email or password"})
+            }
+        })
+
+        .catch(err=>{
+            console.log(err);
+        })
     })
 })
 
